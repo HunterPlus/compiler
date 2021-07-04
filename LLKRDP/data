@@ -1,0 +1,7 @@
+[a,b=c,[d,e]]
+
+[ab, [xy, op], b = cd, xy, [fe, i]]
+
+[ab, [xy, op],[ab, [xy, op], b = cd, xy, [fe, i]], b = cd, xy, [fe, i]]
+
+[a,b=c,,[d,e]]
