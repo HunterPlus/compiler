@@ -1,15 +1,26 @@
-CFLAGS=-std=c11 -g -static
+CFLAGS=-std=c11 -g -fno-common
+
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
 
-mycc: 	$(OBJS)
-		$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+TEST_SRCS=$(wildcard test/*.c)
+TESTS=$(TEST_SRCS:.c=.exe)
+
+mycc: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(OBJS): c.h
 
-test:	mycc
-			./test.sh
-			./test-driver.sh
+test/%.exe: mycc test/%.c
+	$(CC) -o- -E -P -C test/$*.c | ./mycc -o test/$*.s -
+	$(CC) -o $@ test/$*.s -xc test/common
+
+test: $(TESTS)
+	for i in $^; do echo $$i; ./$$i || exit 1; echo; done
+	test/driver.sh
+
 clean:
-		rm -f mycc *.o *~ tmp*
-.PHONY:	test clean
+	rm -rf mycc tmp* $(TESTS) test/*.s test/*.exe
+	find * -type f '(' -name '*~' -o -name '*.o' ')' -exec rm {} ';'
+
+.PHONY: test clean
