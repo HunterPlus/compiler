@@ -69,7 +69,10 @@ static void store(Type *ty) {
         println("\tmov\t%%rax, (%%rdi)");
 }
 
+/*  generate code for a given node. */
 static void gen_expr(Node *node) {
+    println("\t.loc 1 %d", node->tok->line_no);
+
     switch (node->kind) {
     case ND_NUM:
         println("\tmov\t$%d, %%rax", node->val);
@@ -148,7 +151,10 @@ static void gen_expr(Node *node) {
     }
     error_tok(node->tok, "invalid expression");
 }
-static void gen_stmt(Node *node) {    
+
+static void gen_stmt(Node *node) { 
+    println("\t.loc 1 %d", node->tok->line_no);
+
     switch (node->kind) {
     case ND_IF: {
         int c = count();

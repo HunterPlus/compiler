@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
     
     /* traverse the ast to emit assembly. */
     FILE *out = open_file(opt_o);
+    fprintf(out, ".file 1 \"%s\"\n", input_path);
     codegen(prog, out);
     return 0;
 }
