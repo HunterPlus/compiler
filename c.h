@@ -137,6 +137,7 @@ struct Type {
     TypeKind kind;
 
     int size;           /* sizeof() value   */
+    int align;          /* alignment    */
 
     Type *base;         /* pointer      */
 
@@ -172,3 +173,4 @@ void add_type(Node *node);
 
 /*  codegen.c  */
 void codegen(Obj *prog, FILE *out);
+int align_to(int n, int align);
