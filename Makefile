@@ -13,7 +13,7 @@ $(OBJS): c.h
 
 test/%.exe: mycc test/%.c
 	$(CC) -o- -E -P -C test/$*.c | ./mycc -o test/$*.s -
-	$(CC) -o $@ test/$*.s -xc test/common
+	$(CC) -no-pie -o $@ test/$*.s -xc test/common
 
 test: $(TESTS)
 	for i in $^; do echo $$i; ./$$i || exit 1; echo; done
