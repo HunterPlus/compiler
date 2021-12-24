@@ -58,7 +58,7 @@ static void gen_addr(Node *node) {
 
 /*  load a value from where %rax is pointing to.    */
 static void load(Type *ty) {
-    if (ty->kind == TY_ARRAY) {
+    if (ty->kind == TY_ARRAY || ty->kind == TY_STRUCT || ty->kind == TY_UNION) {
         return;
     }
 
@@ -70,6 +70,14 @@ static void load(Type *ty) {
 /*  store %rax to an address that the stack top is pointing to.     */
 static void store(Type *ty) {
     pop("%rdi");
+
+    if (ty->kind == TY_STRUCT || ty->kind == TY_UNION) {
+        for (int i = 0; i < ty->size; i++) {
+            println("\tmov\t%d(%%rax), %%r8b", i);
+            println("\tmov\t%%r8b, %d(%%rdi)", i);
+        }
+        return;
+    }
 
     if (ty->size == 1)
         println("\tmov\t%%al, (%%rdi)");
