@@ -286,7 +286,7 @@ static void emit_text(Obj *prog) {
     assign_lvar_offsets(prog);
 
     for (Obj *fn = prog; fn; fn = fn->next) {
-        if (!fn->is_function)
+        if (!fn->is_function || !fn->is_definition)
             continue;
 
         println("\t.globl\t%s", fn->name);

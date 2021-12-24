@@ -63,6 +63,7 @@ struct Obj {
     int offset;     /* local variable   */
 
     bool is_function;   /* global variable or function */
+    bool is_definition;
 
     char *init_data;    /* global variable  */
 
