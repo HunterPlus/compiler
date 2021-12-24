@@ -154,19 +154,35 @@ static void gen_expr(Node *node) {
     gen_expr(node->lhs);
     pop("%rdi");
 
+    char *ax, *di;
+
+    if (node->lhs->ty->kind == TY_LONG || node->lhs->ty->base) {
+        ax = "%rax";
+        di = "%rdi";
+    } else {
+        ax = "%eax";
+        di = "%edi";
+    }
+
     switch (node->kind) {
     case ND_ADD:
-        println("\tadd\t%%rdi, %%rax");    return;
+        println("\tadd\t%s, %s", di, ax);    return;
     case ND_SUB:
-        println("\tsub\t%%rdi, %%rax");    return;
+        println("\tsub\t%s, %s", di, ax);    return;
     case ND_MUL:
-        println("\timul\t%%rdi, %%rax");   return;
+        println("\timul\t%s, %s", di, ax);   return;
     case ND_DIV:
-        println("\tcqo");
-        println("\tidiv\t%%rdi");          return;
-    case ND_EQ:     case ND_NE:
-    case ND_LT:     case ND_LE:
-        println("\tcmp\t%%rdi, %%rax");
+        if (node->lhs->ty->size == 8)
+            println("\tcqo");
+        else   
+            println("\tcdq");
+        println("\tidiv\t%s", di);
+        return;
+    case ND_EQ:     
+    case ND_NE:
+    case ND_LT:     
+    case ND_LE:
+        println("\tcmp\t%s, %s", di, ax);
 
         if (node->kind == ND_EQ)
             println("\tsete\t%%al");
