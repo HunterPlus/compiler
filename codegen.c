@@ -183,6 +183,12 @@ static void gen_expr(Node *node) {
         gen_expr(node->lhs);
         cast(node->lhs->ty, node->ty);
         return;
+    case ND_NOT:
+        gen_expr(node->lhs);
+        println("\tcmp\t$0, %%rax");
+        println("\tsete\t%%al");
+        println("\tmovzx\t%%al, %%rax");
+        return;
     case ND_FUNCALL: {
         int nargs = 0;
         for (Node *arg = node->args; arg; arg = arg->next) {
