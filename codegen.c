@@ -189,6 +189,10 @@ static void gen_expr(Node *node) {
         println("\tsete\t%%al");
         println("\tmovzx\t%%al, %%rax");
         return;
+    case ND_BITNOT:
+        gen_expr(node->lhs);
+        println("\tnot\t%%rax");
+        return;
     case ND_FUNCALL: {
         int nargs = 0;
         for (Node *arg = node->args; arg; arg = arg->next) {
