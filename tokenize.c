@@ -196,6 +196,27 @@ static Token *read_string_literal(char *start) {
     tok->str = buf;
     return tok;
 }
+
+static Token *read_char_literal(char *start) {
+    char *p = start + 1;
+    if (*p == '\0')
+        error_at(start, "unclosed char literal");
+    
+    char c;
+    if (*p == '\\')
+        c = read_escaped_char(&p, p + 1);
+    else
+        c = *p++;
+
+    char *end = strchr(p, '\'');
+    if (!end)
+        error_at(p, "unclosed char literal");
+    
+    Token *tok = new_token(TK_NUM, start, end + 1);
+    tok->val = c;
+    return tok;
+}
+
 static void convert_keywords(Token *tok) {
     for (Token *t = tok; t->kind != TK_EOF; t = t->next)
         if (is_keyword(t))
@@ -263,6 +284,14 @@ static Token *tokenize(char *filename, char *p) {
             p += cur->len;
             continue;
         }
+
+        /*  character literal   */
+        if (*p == '\'') {
+            cur = cur->next = read_char_literal(p);
+            p += cur->len;
+            continue;
+        }
+        
         /*  identifier or keyword   */
         if (is_ident1(*p)) {
             char *start = p;
