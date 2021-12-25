@@ -99,6 +99,7 @@ typedef enum {
     ND_STMT_EXPR,   /* statement expression     */
     ND_VAR,         /* variable                 */
     ND_NUM,         /* integer                  */
+    ND_CAST,        /* type cast                */
 } NodeKind;
 
 struct Node {
