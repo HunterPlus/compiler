@@ -121,6 +121,7 @@ struct Node {
     Member *member; /* struct member access     */
 
     char *funcname; /* function call            */
+    Type *func_ty;
     Node *args;
     
     Obj *var;       /* used if kind == ND_VAR   */
