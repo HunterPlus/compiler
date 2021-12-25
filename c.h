@@ -64,6 +64,7 @@ struct Obj {
 
     bool is_function;   /* global variable or function */
     bool is_definition;
+    bool is_static;
 
     char *init_data;    /* global variable  */
 
