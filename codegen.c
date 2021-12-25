@@ -65,9 +65,9 @@ static void load(Type *ty) {
     }
 
     if (ty->size == 1)
-        println("\tmovsbq\t(%%rax), %%rax");
+        println("\tmovsbl\t(%%rax), %%eax");
     else if (ty->size == 2)
-        println("\tmovswq\t(%%rax), %%rax");
+        println("\tmovswl\t(%%rax), %%eax");
     else if (ty->size == 4)
         println("\tmovsxd\t(%%rax), %%rax");
     else
