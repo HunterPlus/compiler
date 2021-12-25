@@ -651,7 +651,7 @@ static Node *assign(Token **rest, Token *tok) {
 
     if (equal(tok, "*="))
         return to_assign(new_binary(ND_MUL, node, assign(rest, tok->next), tok));
-        
+
     if (equal(tok, "/="))
         return to_assign(new_binary(ND_DIV, node, assign(rest, tok->next), tok));
 
@@ -802,17 +802,29 @@ static Node *cast(Token **rest, Token *tok) {
     return unary(rest, tok);
 }
 
-/*  unary   =   ("+" | "-" | "*" | "&") cast   
+/*  unary   =   ("+" | "-" | "*" | "&") cast
+            | ("++" | "--") unary
             |   postfix                           */
 static Node *unary(Token **rest, Token *tok) {
     if (equal(tok, "+"))
         return cast(rest, tok->next);
+
     if (equal(tok, "-"))
         return new_unary(ND_NEG, cast(rest, tok->next), tok);
+
     if (equal(tok, "&"))
         return new_unary(ND_ADDR, cast(rest, tok->next), tok);
+
     if (equal(tok, "*"))
         return new_unary(ND_DEREF, cast(rest, tok->next), tok);
+
+    /*  read ++i as i += 1  */
+    if (equal(tok, "++"))
+        return to_assign(new_add(unary(rest, tok->next), new_num(1, tok), tok));
+
+    /*  read --i as i -= 1  */
+    if (equal(tok, "--"))
+        return to_assign(new_sub(unary(rest, tok->next), new_num(1, tok), tok));
 
     return postfix(rest, tok);
 }
