@@ -655,6 +655,9 @@ static Node *assign(Token **rest, Token *tok) {
     if (equal(tok, "/="))
         return to_assign(new_binary(ND_DIV, node, assign(rest, tok->next), tok));
 
+    if (equal(tok, "%="))
+        return to_assign(new_binary(ND_MOD, node, assign(rest, tok->next), tok));
+
     *rest = tok;
     return node;
 }
@@ -768,7 +771,8 @@ static Node *add(Token **rest, Token *tok) {
         return node;
     }
 }
-/* mul = cast ("*" cast | "/" cast)*  */
+
+/* mul = cast ("*" cast | "/" cast | "%" cast)*  */
 static Node *mul(Token **rest, Token *tok) {
     Node *node = cast(&tok, tok);
 
@@ -779,10 +783,17 @@ static Node *mul(Token **rest, Token *tok) {
             node = new_binary(ND_MUL, node, cast(&tok, tok->next), start);
             continue;
         }
+
         if (equal(tok, "/")) {
             node = new_binary(ND_DIV, node, cast(&tok, tok->next), start);
             continue;
         }
+
+        if (equal(tok, "%")) {
+            node = new_binary(ND_MOD, node, cast(&tok, tok->next), start);
+            continue;
+        }
+        
         *rest = tok;
         return node;
     }

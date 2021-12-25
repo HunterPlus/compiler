@@ -83,27 +83,28 @@ typedef enum {
     ND_MUL,
     ND_DIV,
     ND_NEG,
+    ND_MOD,         /* %        */
     ND_EQ,
     ND_NE,
-    ND_LT,          /* <                        */
-    ND_LE,          /* <=                       */
-    ND_ASSIGN,      /* =                        */
-    ND_COMMA,       /* ,                        */
+    ND_LT,          /* <        */
+    ND_LE,          /* <=       */
+    ND_ASSIGN,      /* =        */
+    ND_COMMA,       /* ,        */
     ND_MEMBER,      /* . (struct member access) */
-    ND_ADDR,        /* unary &                  */
-    ND_DEREF,       /* unary *                  */
-    ND_NOT,         /* !                        */
-    ND_BITNOT,      /* ~                        */
-    ND_RETURN,      /* "return "                */
-    ND_IF,          /* "if"                     */
-    ND_FOR,         /* "for" or "while"         */
-    ND_BLOCK,       /* {...}                    */
-    ND_FUNCALL,     /* function call            */
+    ND_ADDR,        /* unary &  */
+    ND_DEREF,       /* unary *  */
+    ND_NOT,         /* !        */
+    ND_BITNOT,      /* ~        */
+    ND_RETURN,      /* "return "        */
+    ND_IF,          /* "if"     */
+    ND_FOR,         /* "for" or "while" */
+    ND_BLOCK,       /* {...}            */
+    ND_FUNCALL,     /* function call    */
     ND_EXPR_STMT,   /* Expression statement     */
     ND_STMT_EXPR,   /* statement expression     */
-    ND_VAR,         /* variable                 */
-    ND_NUM,         /* integer                  */
-    ND_CAST,        /* type cast                */
+    ND_VAR,         /* variable         */
+    ND_NUM,         /* integer          */
+    ND_CAST,        /* type cast        */
 } NodeKind;
 
 struct Node {

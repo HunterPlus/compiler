@@ -232,11 +232,15 @@ static void gen_expr(Node *node) {
     case ND_MUL:
         println("\timul\t%s, %s", di, ax);   return;
     case ND_DIV:
+    case ND_MOD:
         if (node->lhs->ty->size == 8)
             println("\tcqo");
         else   
             println("\tcdq");
         println("\tidiv\t%s", di);
+
+        if (node->kind == ND_MOD)
+            println("\tmov\t%%rdx, %%rax");
         return;
     case ND_EQ:     
     case ND_NE:
