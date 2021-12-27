@@ -193,6 +193,36 @@ static void gen_expr(Node *node) {
         gen_expr(node->lhs);
         println("\tnot\t%%rax");
         return;
+    case ND_LOGAND: {
+        int c = count();
+        gen_expr(node->lhs);
+        println("\tcmp\t$0, %%rax");
+        println("\tje\t.L.false.%d", c);
+        gen_expr(node->rhs);
+        println("\tcmp\t$0, %%rax");
+        println("\tje\t.L.false.%d", c);
+        println("\tmov\t$1, %%rax");
+        println("\tjmp\t.L.end.%d", c);
+        println(".L.false.%d:", c);
+        println("\tmov\t$0, %%rax");
+        println(".L.end.%d:", c);
+        return;
+    }
+    case ND_LOGOR: {
+        int c = count();
+        gen_expr(node->lhs);
+        println("\tcmp\t$0, %%rax");
+        println("\tjne\t.L.true.%d", c);
+        gen_expr(node->rhs);
+        println("\tcmp\t$0, %%rax");
+        println("\tjne\t.L.true.%d", c);
+        println("\tmov\t$0, %%rax");
+        println("\tjmp\t.L.end.%d", c);
+        println(".L.true.%d:", c);
+        println("\tmov\t$1, %%rax");
+        println(".L.end.%d:", c);
+        return;
+    }
     case ND_FUNCALL: {
         int nargs = 0;
         for (Node *arg = node->args; arg; arg = arg->next) {
