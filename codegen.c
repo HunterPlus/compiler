@@ -327,13 +327,13 @@ static void gen_stmt(Node *node) {
         if (node->cond) {
             gen_expr(node->cond);
             println("\tcmp\t$0, %%rax");
-            println("\tje\t.L.end.%d", c);
+            println("\tje\t%s", node->brk_label);
         }
         gen_stmt(node->then);
         if (node->inc)
             gen_expr(node->inc);
         println("\tjmp\t.L.begin.%d", c);
-        println(".L.end.%d:", c);
+        println("%s:", node->brk_label);
         return;
     }
     case ND_BLOCK:

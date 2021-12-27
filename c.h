@@ -128,11 +128,13 @@ struct Node {
     Node *init;
     Node *inc;
 
-    Node *body;     /* block or statement expression */
+    char *brk_label;    /* "break" label    */
 
-    Member *member; /* struct member access     */
+    Node *body;         /* block or statement expression */
 
-    char *funcname; /* function call            */
+    Member *member;     /* struct member access     */
+
+    char *funcname;     /* function call            */
     Type *func_ty;
     Node *args;
 
