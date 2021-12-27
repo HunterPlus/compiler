@@ -52,6 +52,10 @@ Type *array_of(Type *base, int len) {
     return ty;
 }
 
+Type *struct_type(void) {
+    return new_type(TY_STRUCT, 0, 1);
+}
+
 static Type *get_common_type(Type *ty1, Type *ty2) {
     if (ty1->base)
         return pointer_to(ty1->base);
