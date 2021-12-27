@@ -330,6 +330,7 @@ static void gen_stmt(Node *node) {
             println("\tje\t%s", node->brk_label);
         }
         gen_stmt(node->then);
+        println("%s:", node->cont_label);
         if (node->inc)
             gen_expr(node->inc);
         println("\tjmp\t.L.begin.%d", c);
