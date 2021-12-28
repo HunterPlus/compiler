@@ -297,7 +297,18 @@ static void gen_expr(Node *node) {
             println("\tsetle\t%%al");
 
         println("\tmovzb\t%%al, %%rax");
-        return;    
+        return; 
+    case ND_SHL:
+        println("\tmov\t%%rdi, %%rcx");
+        println("\tshl\t%%cl, %s", ax);
+        return;
+    case ND_SHR:
+        println("\tmov\t%%rdi, %%rcx");
+        if (node->ty->size == 8)
+            println("\tsar\t%%cl, %s", ax);
+        else    
+            println("\tsar\t%%cl, %s", ax);
+        return;   
     }
     error_tok(node->tok, "invalid expression");
 }
@@ -358,7 +369,7 @@ static void gen_stmt(Node *node) {
         println("%s:", node->label);
         gen_stmt(node->lhs);
         return;
-        
+
     case ND_BLOCK:
         for (Node *n = node->body; n; n = n->next)
             gen_stmt(n);
