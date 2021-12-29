@@ -78,6 +78,7 @@ struct Obj {
 
 /* ast node */
 typedef enum {
+    ND_NULL_EXPR,   /* do nothing */
     ND_ADD,
     ND_SUB,
     ND_MUL,
