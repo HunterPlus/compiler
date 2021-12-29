@@ -118,6 +118,7 @@ typedef enum {
     ND_VAR,         /* variable         */
     ND_NUM,         /* integer          */
     ND_CAST,        /* type cast        */
+    ND_MEMZERO,     /* zero-clear a stack variable  */
 } NodeKind;
 
 struct Node {
